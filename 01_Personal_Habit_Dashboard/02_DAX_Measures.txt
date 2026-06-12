@@ -1,0 +1,121 @@
+================================
+PERSONAL HABIT DASHBOARD - DAX MEASURES
+================================
+
+=== KPI MEASURES ===
+
+// Average Sleep Hours (Current Month)
+Avg_Sleep_CurrentMonth = 
+VAR CurrentMonth = MONTH(TODAY())
+VAR CurrentYear = YEAR(TODAY())
+RETURN
+AVERAGE(
+    FILTER(
+        'HabitTracking',
+        MONTH('HabitTracking'[Date]) = CurrentMonth &&
+        YEAR('HabitTracking'[Date]) = CurrentYear
+    ),
+    'HabitTracking'[Sleep_Hours]
+)
+
+// Average Productivity Score
+Avg_Productivity = AVERAGE('HabitTracking'[Productivity_Score])
+
+// Average Mood Score
+Avg_Mood = AVERAGE('HabitTracking'[Mood_Score])
+
+// Total Study Hours
+Total_Study_Hours = SUM('HabitTracking'[Study_Hours])
+
+// Total Gym Sessions
+Total_Gym_Sessions = CALCULATE(COUNTROWS('HabitTracking'), 'HabitTracking'[Gym_Duration_Minutes] > 0)
+
+// Average Water Intake
+Avg_Water_Intake = AVERAGE('HabitTracking'[Water_Intake_Liters])
+
+=== TREND ANALYSIS ===
+
+// Sleep Hours 7-Day Rolling Average
+Sleep_7Day_Avg = 
+VAR CurrentDate = MAX('HabitTracking'[Date])
+RETURN
+AVERAGE(
+    FILTER(
+        'HabitTracking',
+        'HabitTracking'[Date] <= CurrentDate &&
+        'HabitTracking'[Date] > CurrentDate - 7
+    ),
+    'HabitTracking'[Sleep_Hours]
+)
+
+// Productivity Trend (vs Previous Month)
+Productivity_vs_PrevMonth = 
+VAR CurrentMonth = MONTH(TODAY())
+VAR CurrentYear = YEAR(TODAY())
+VAR CurrentMonthAvg = CALCULATE(
+    AVERAGE('HabitTracking'[Productivity_Score]),
+    FILTER('HabitTracking', 
+        MONTH('HabitTracking'[Date]) = CurrentMonth && 
+        YEAR('HabitTracking'[Date]) = CurrentYear
+    )
+)
+VAR PrevMonthAvg = CALCULATE(
+    AVERAGE('HabitTracking'[Productivity_Score]),
+    FILTER('HabitTracking',
+        MONTH('HabitTracking'[Date]) = IF(CurrentMonth=1,12,CurrentMonth-1) &&
+        YEAR('HabitTracking'[Date]) = IF(CurrentMonth=1,CurrentYear-1,CurrentYear)
+    )
+)
+RETURN
+CurrentMonthAvg - PrevMonthAvg
+
+=== CONSISTENCY METRICS ===
+
+// Gym Consistency (% days with gym)
+Gym_Consistency_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('HabitTracking'), 'HabitTracking'[Gym_Duration_Minutes] > 0),
+    COUNTROWS('HabitTracking')
+) * 100
+
+// Study Goal Achievement (study hours >= 4)
+Study_Goal_Achievement = 
+DIVIDE(
+    CALCULATE(COUNTROWS('HabitTracking'), 'HabitTracking'[Study_Hours] >= 4),
+    COUNTROWS('HabitTracking')
+) * 100
+
+// Sleep Quality Goal (sleep >= 7 hours)
+Sleep_Quality_Goal = 
+DIVIDE(
+    CALCULATE(COUNTROWS('HabitTracking'), 'HabitTracking'[Sleep_Hours] >= 7),
+    COUNTROWS('HabitTracking')
+) * 100
+
+=== CORRELATION MEASURES ===
+
+// Sleep Impact on Mood (if sleep > 7, mood typically high)
+Sleep_Mood_Correlation = 
+VAR HighSleepDays = CALCULATE(
+    AVERAGE('HabitTracking'[Mood_Score]),
+    FILTER('HabitTracking', 'HabitTracking'[Sleep_Hours] >= 7)
+)
+VAR LowSleepDays = CALCULATE(
+    AVERAGE('HabitTracking'[Mood_Score]),
+    FILTER('HabitTracking', 'HabitTracking'[Sleep_Hours] < 7)
+)
+RETURN
+HighSleepDays - LowSleepDays
+
+// Exercise Impact on Productivity
+Exercise_Productivity_Correlation = 
+VAR ExerciseDays = CALCULATE(
+    AVERAGE('HabitTracking'[Productivity_Score]),
+    FILTER('HabitTracking', 'HabitTracking'[Gym_Duration_Minutes] > 0)
+)
+VAR RestDays = CALCULATE(
+    AVERAGE('HabitTracking'[Productivity_Score]),
+    FILTER('HabitTracking', 'HabitTracking'[Gym_Duration_Minutes] = 0)
+)
+RETURN
+ExerciseDays - RestDays
