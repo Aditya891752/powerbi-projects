@@ -1,0 +1,17 @@
+Player_Name,Team,Role,Matches,Runs,Wickets,Avg_Runs_Per_Match,Strike_Rate,Economy_Rate,Centuries,Fifties,Best_Bowling
+Player_1,MI,Batsman,45,1823,0,40,135,0,2,5,0/0
+Player_2,MI,Bowler,42,0,58,0,0,7.2,0,0,4/20
+Player_3,CSK,Batsman,52,2134,0,41,138,0,3,7,0/0
+Player_4,CSK,Bowler,48,0,65,0,0,6.8,0,0,5/15
+Player_5,RCB,Batsman,48,1956,0,41,132,0,2,6,0/0
+Player_6,RCB,Bowler,45,0,52,0,0,7.5,0,0,4/25
+Player_7,KKR,Batsman,50,1845,0,37,130,0,1,8,0/0
+Player_8,KKR,Bowler,46,0,48,0,0,8.1,0,0,3/22
+Player_9,DC,Batsman,38,1523,0,40,128,0,1,5,0/0
+Player_10,DC,Bowler,40,0,45,0,0,7.3,0,0,4/18
+Player_11,KXIP,Batsman,42,1634,0,39,134,0,0,7,0/0
+Player_12,KXIP,Bowler,41,0,50,0,0,7.8,0,0,3/28
+Player_13,RR,Batsman,48,1789,0,37,129,0,1,6,0/0
+Player_14,RR,Bowler,44,0,46,0,0,8.2,0,0,2/30
+Player_15,SRH,Batsman,46,1912,0,42,136,0,2,8,0/0
+Player_16,SRH,Bowler,43,0,55,0,0,7.0,0,0,4/20

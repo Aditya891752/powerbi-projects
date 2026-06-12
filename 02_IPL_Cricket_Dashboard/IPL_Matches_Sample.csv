@@ -1,0 +1,21 @@
+Match_ID,Season,Date,Venue,Home_Team,Away_Team,Winner,Winning_Margin,Toss_Winner,Toss_Decision,Man_of_Match
+1,2008,2008-04-18,MCG,MI,CSK,MI,6,MI,bat,Player_1
+2,2008,2008-04-21,Eden Gardens,RCB,KKR,RCB,8,KKR,field,Player_2
+3,2008,2008-04-24,Wankhede,DC,RR,DC,15,RR,bat,Player_3
+4,2008,2008-04-27,Arun Jaitley Stadium,KXIP,SRH,KXIP,12,SRH,field,Player_4
+5,2008,2008-04-30,MA Chidambaram,CSK,MI,CSK,7,MI,bat,Player_5
+6,2008,2008-05-03,Feroz Shah Kotla,KKR,DC,KKR,4,DC,field,Player_6
+7,2008,2008-05-06,M. A. Chidambaram Stadium,RR,KXIP,RR,9,KXIP,bat,Player_7
+8,2008,2008-05-09,DY Patil Stadium,SRH,RCB,RCB,11,SRH,field,Player_8
+9,2008,2008-05-12,MCG,MI,KKR,MI,5,KKR,bat,Player_9
+10,2008,2008-05-15,Eden Gardens,CSK,DC,CSK,8,DC,field,Player_10
+11,2008,2008-05-18,Wankhede,RCB,RR,RCB,6,RR,bat,Player_11
+12,2008,2008-05-21,Arun Jaitley Stadium,KXIP,MI,KXIP,3,MI,field,Player_12
+13,2008,2008-05-24,MA Chidambaram,SRH,KKR,KKR,9,SRH,bat,Player_13
+14,2008,2008-05-27,Feroz Shah Kotla,DC,CSK,CSK,7,DC,field,Player_14
+15,2009,2009-03-14,MCG,RCB,CSK,RCB,10,CSK,bat,Player_15
+16,2009,2009-03-17,Eden Gardens,KKR,DC,DC,12,KKR,field,Player_16
+17,2009,2009-03-20,Wankhede,RR,MI,MI,8,RR,bat,Player_17
+18,2009,2009-03-23,Arun Jaitley Stadium,SRH,KXIP,KXIP,5,SRH,field,Player_18
+19,2009,2009-03-26,MA Chidambaram,CSK,RCB,CSK,11,RCB,bat,Player_19
+20,2009,2009-03-29,Feroz Shah Kotla,DC,KKR,KKR,6,DC,field,Player_20

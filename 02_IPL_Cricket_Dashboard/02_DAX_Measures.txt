@@ -1,0 +1,155 @@
+================================
+IPL CRICKET DASHBOARD - DAX MEASURES
+================================
+
+=== BATTING METRICS ===
+
+// Total Runs by Team
+Team_Total_Runs = SUM('Deliveries'[Total_Runs])
+
+// Average Strike Rate
+Avg_Strike_Rate = AVERAGE('PlayerStats'[Strike_Rate])
+
+// Total Centuries
+Total_Centuries = SUM('PlayerStats'[Centuries])
+
+// Total Fifties
+Total_Fifties = SUM('PlayerStats'[Fifties])
+
+// Highest Individual Score (Max)
+Highest_Score = MAX('Deliveries'[Runs_Off_Bat])
+
+=== BOWLING METRICS ===
+
+// Total Wickets by Team
+Team_Total_Wickets = SUM('Deliveries'[Wicket])
+
+// Average Economy Rate
+Avg_Economy_Rate = AVERAGE('PlayerStats'[Economy_Rate])
+
+// Best Bowling Performance
+Best_Bowling_Performance = MAXX(
+    FILTER('PlayerStats', 'PlayerStats'[Team] = SELECTEDVALUE('PlayerStats'[Team])),
+    'PlayerStats'[Wickets]
+)
+
+// Total Wickets Lost (Cumulative)
+Wickets_Lost = CALCULATE(
+    SUM('Deliveries'[Wicket]),
+    FILTER('Deliveries', 'Deliveries'[Wicket] = 1)
+)
+
+=== TEAM PERFORMANCE ===
+
+// Win Percentage
+Win_Percentage = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Winner] = SELECTEDVALUE('Matches'[Home_Team])),
+    COUNTROWS('Matches')
+) * 100
+
+// Home vs Away Win Rate
+Home_Win_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Home_Team] = 'Matches'[Winner]),
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Home_Team] = SELECTEDVALUE('Matches'[Home_Team]))
+) * 100
+
+Away_Win_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Away_Team] = 'Matches'[Winner]),
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Away_Team] = SELECTEDVALUE('Matches'[Away_Team]))
+) * 100
+
+// Average Winning Margin
+Avg_Winning_Margin = AVERAGE('Matches'[Winning_Margin])
+
+// Toss Influence (Toss Win to Match Win %)
+Toss_to_Win_Impact = 
+VAR TossWins = CALCULATE(COUNTROWS('Matches'), 'Matches'[Toss_Winner] = 'Matches'[Winner])
+VAR TotalMatches = COUNTROWS('Matches')
+RETURN
+DIVIDE(TossWins, TotalMatches) * 100
+
+=== PLAYER RANKINGS ===
+
+// Top Scorer (Runs)
+Top_Scorer_Runs = 
+MAXX(
+    FILTER('PlayerStats', 'PlayerStats'[Team] = SELECTEDVALUE('PlayerStats'[Team])),
+    'PlayerStats'[Runs]
+)
+
+// Most Wickets (Bowler)
+Most_Wickets = 
+MAXX(
+    FILTER('PlayerStats', 'PlayerStats'[Role] = "Bowler"),
+    'PlayerStats'[Wickets]
+)
+
+// Best Strike Rate (Min 20 matches)
+Best_Strike_Rate = 
+MAXX(
+    FILTER(
+        'PlayerStats',
+        'PlayerStats'[Matches] >= 20 && 'PlayerStats'[Role] = "Batsman"
+    ),
+    'PlayerStats'[Strike_Rate]
+)
+
+// Most Economical Bowler (Min 15 matches)
+Most_Economical = 
+MINX(
+    FILTER(
+        'PlayerStats',
+        'PlayerStats'[Matches] >= 15 && 'PlayerStats'[Role] = "Bowler"
+    ),
+    'PlayerStats'[Economy_Rate]
+)
+
+=== MATCH INSIGHTS ===
+
+// Matches Count by Season
+Matches_By_Season = COUNTROWS('Matches')
+
+// Average Runs Per Match
+Avg_Runs_Per_Match = AVERAGE('PlayerStats'[Avg_Runs_Per_Match])
+
+// Venue Analysis - Home Advantage
+Home_Advantage_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Home_Team] = 'Matches'[Winner]),
+    COUNTROWS('Matches')
+) * 100
+
+// Bat vs Ball Success
+Bat_First_Win_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Toss_Decision] = "bat" && 'Matches'[Winner] = 'Matches'[Toss_Winner]),
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Toss_Decision] = "bat")
+) * 100
+
+Field_First_Win_Pct = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Toss_Decision] = "field" && 'Matches'[Winner] = 'Matches'[Toss_Winner]),
+    CALCULATE(COUNTROWS('Matches'), 'Matches'[Toss_Decision] = "field")
+) * 100
+
+=== ADVANCED ANALYTICS ===
+
+// Player Consistency Score (Low variance in runs)
+Consistency_Score = 
+VAR AvgRuns = AVERAGE('PlayerStats'[Avg_Runs_Per_Match])
+VAR StdDev = CALCULATE(
+    SQRT(SUMPRODUCT(('PlayerStats'[Avg_Runs_Per_Match] - AvgRuns)^2) / COUNTROWS('PlayerStats')),
+    ALLEXCEPT('PlayerStats', 'PlayerStats'[Team])
+)
+RETURN
+IF(StdDev > 0, (AvgRuns / StdDev) * 10, 0)
+
+// Run Rate Trend (Runs per Over)
+Runs_Per_Over = 
+DIVIDE(
+    SUM('Deliveries'[Total_Runs]),
+    DISTINCTCOUNT('Deliveries'[Over])
+)
